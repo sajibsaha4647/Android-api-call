@@ -1,9 +1,11 @@
 package com.example.apicallwithretrofit.Utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 public class CheckNetwork {
     public static boolean isNetworkConnected(Context context){
-//        return ;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null;
     }
 }
