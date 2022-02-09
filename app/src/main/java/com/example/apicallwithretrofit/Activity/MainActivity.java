@@ -2,11 +2,14 @@ package com.example.apicallwithretrofit.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.apicallwithretrofit.Adapter.PostAdapter;
 import com.example.apicallwithretrofit.ApiService.ApiService;
 import com.example.apicallwithretrofit.ApiService.AppConfig;
 import com.example.apicallwithretrofit.Model.Getposts;
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private CheckNetwork checkNetwork;
     private boolean temp = false;
     private ArrayList<Getposts> getposts = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         apiService = AppConfig.getRetrofit().create(ApiService.class);
-
         getallPosts();
+
+        recyclerView = findViewById(R.id.RecycleView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+
+
 
     }
 
@@ -45,10 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<ArrayList<Getposts>> call, @NonNull Response<ArrayList<Getposts>> response) {
 
                     getposts = response.body();
-
-                    for (int i=0;i<getposts.size();i++){
-                        System.out.println(getposts.get(i).getTitle());
-                    }
+                    postAdapter = new PostAdapter(MainActivity.this,getposts);
+                    recyclerView.setAdapter(postAdapter);
 
                 }
 
